@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>გილოცავ დაბადების დღეს, ლიკა! 💖</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- SweetAlert2 -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'script': ['Caveat', 'cursive'],
+                        'body': ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-pink': '#ff7eb3',
+                        'brand-purple': '#ff758c',
+                        'brand-gold': '#ffd700',
+                        'brand-light': '#fff0f5'
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'bounce-slow': 'bounce 3s infinite',
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 50%, #fff5f8 100%);
+            background-size: 300% 300%;
+            animation: gradientMove 20s ease infinite;
+            color: #333;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on mobile */
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Background Floating Elements */
+        .floating-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .float-item {
+            position: absolute;
+            opacity: 0.5;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) scale(0.5) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.5) rotate(360deg); opacity: 0; }
+        }
+
+        /* Mouse/Touch Trailing Sparkles */
+        .sparkle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: sparkleFade 1s forwards;
+            text-shadow: 0 0 8px rgba(255, 117, 140, 0.8);
+        }
+
+        @keyframes sparkleFade {
+            0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: translate(-50%, 50px) scale(0) rotate(180deg); opacity: 0; }
+        }
+
+        /* Masonry Gallery Styles - Mobile Optimized */
+        .masonry-grid {
+            column-count: 2; /* 2 columns on mobile */
+            column-gap: 1rem;
+        }
+        @media (min-width: 768px) { 
+            .masonry-grid { column-count: 3; column-gap: 1.5rem; } 
+        }
+        @media (min-width: 1024px) { 
+            .masonry-grid { column-count: 4; } 
+        }
+
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 8px 20px -5px rgba(255, 117, 140, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid white;
+            background-color: #fff;
+        }
+        @media (min-width: 768px) {
+            .masonry-item { margin-bottom: 1.5rem; border-width: 4px; }
+        }
+
+        .masonry-item:hover, .masonry-item:active {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 25px -10px rgba(255, 117, 140, 0.5);
+            z-index: 10;
+        }
+
+        .masonry-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 0.75rem;
+            object-fit: cover;
+        }
+
+        /* Joke Section Transitions */
+        .joke-img-container {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .joke-img-container img { transition: transform 0.6s ease; }
+        .joke-img-container:hover img { transform: scale(1.05); }
+
+        /* Heart to GIF Animation Styles */
+        #magic-heart {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            filter: drop-shadow(0 15px 25px rgba(255, 117, 140, 0.5));
+        }
+        #magic-heart:hover, #magic-heart:active {
+            transform: scale(1.2) translateY(-5px);
+        }
+        .explode-animation {
+            animation: heartPop 1s forwards cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+        @keyframes heartPop {
+            0% { transform: scale(1); filter: brightness(1); }
+            30% { transform: scale(0.8); filter: brightness(0.8); }
+            60% { transform: scale(1.8); filter: brightness(1.2); }
+            100% { transform: scale(20); opacity: 0; filter: brightness(2); display: none; }
+        }
+
+        /* Buttons */
+        .magic-btn {
+            background: linear-gradient(45deg, #ff7eb3, #ff758c, #ff7eb3);
+            background-size: 200% 200%;
+            animation: gradientMove 3s ease infinite;
+            box-shadow: 0 10px 20px rgba(255, 117, 140, 0.4);
+            transition: all 0.3s ease;
+        }
+        .magic-btn:hover, .magic-btn:active {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 117, 140, 0.6);
+        }
+        
+        .cursor-type {
+            display: inline-block;
+            width: 3px;
+            background-color: #ff758c;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* SweetAlert Customization */
+        div:where(.swal2-container) div:where(.swal2-popup) {
+            border-radius: 28px !important;
+            border: 3px solid #ff7eb3;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 2em;
+        }
+
+        /* Falling flowers */
+        .falling-flower {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="font-body antialiased relative">
+
+    <!-- Floating Background Elements -->
+    <div class="floating-bg" id="bgContainer"></div>
+
+    <!-- Main Content Wrapper -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 relative z-10">
+
+        <!-- Hero Section -->
+        <section class="min-h-[85vh] flex flex-col items-center justify-center text-center mb-20 md:mb-32 mt-10 md:mt-0" data-aos="zoom-in" data-aos-duration="1500">
+            <!-- Hero Image -->
+            <div class="relative rounded-[2rem] md:rounded-full overflow-hidden w-48 h-64 md:w-72 md:h-72 mb-8 md:mb-12 border-4 md:border-8 border-white shadow-2xl z-10 group cursor-pointer transform transition-transform duration-500 hover:rotate-3">
+                <div class="absolute inset-0 bg-brand-pink opacity-20 group-hover:opacity-0 transition-opacity duration-500 z-20"></div>
+                <!-- Make sure your main photo is named exactly this, or it will use the fallback -->
+                <img src="photo_24.jpg" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x800/ffeaf1/ff758c?text=მთავარი+ფოტო';" 
+                     alt="Lika" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+            </div>
+            
+            <h1 class="text-5xl sm:text-6xl md:text-8xl font-script text-transparent bg-clip-text bg-gradient-to-r from-brand-pink to-brand-purple mb-4 md:mb-6 leading-tight drop-shadow-sm px-2">
+                გილოცავ დაბადების <br/>დღეს, <span id="typewriter"></span><span class="cursor-type">&nbsp;</span>
+            </h1>
+            
+            <p class="text-lg sm:text-2xl md:text-3xl text-gray-700 max-w-3xl mt-2 md:mt-4 font-medium leading-relaxed px-4" data-aos="fade-up" data-aos-delay="500">
+                ყველაზე პოზიტიურ, ლამაზ და ენერგიულ მეგობარს! ✨ <br>
+                ეს დღე შენია, იბრწყინე ყოველთვის!
+            </p>
+
+            <a href="#joke-section" class="mt-12 md:mt-16 animate-bounce text-brand-purple bg-white p-4 md:p-5 rounded-full shadow-lg hover:shadow-xl transition-shadow cursor-pointer border border-pink-100">
+                <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </a>
+        </section>
+
+        <!-- The Interactive Dodge Joke Section -->
+        <section id="joke-section" class="mb-24 md:mb-32 pt-10">
+            <div class="bg-white/80 backdrop-blur-lg rounded-[2rem] md:rounded-[3rem] p-6 md:p-12 shadow-2xl border-4 border-white text-center">
+                <h2 id="joke-title" class="text-3xl sm:text-4xl md:text-5xl font-script text-brand-purple mb-8 md:mb-10 transition-all duration-300">
+                    მოდი გავარკვიოთ: რომელი უფრო ლამაზია? 🤔
+                </h2>
+                
+                <div id="joke-container" class="flex flex-col md:flex-row gap-6 md:gap-8 items-center justify-center min-h-[350px] md:min-h-[450px]">
+                    
+                    <!-- Lika's Photo for Joke -->
+                    <div id="joke-lika" class="joke-img-container w-full md:w-1/2 relative rounded-2xl md:rounded-[2rem] overflow-hidden border-4 border-brand-pink shadow-lg group">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                            <span class="text-white font-bold text-xl md:text-2xl font-script bg-brand-pink/90 px-4 py-2 md:px-6 md:py-3 rounded-full transform -rotate-6 shadow-lg">მე ავირჩიო? 👀</span>
+                        </div>
+                        <img src="photo_21.jpg" 
+                             onerror="this.onerror=null; this.src='https://placehold.co/600x800/ffeaf1/ff758c?text=ლიკა';" 
+                             alt="Lika" class="w-full h-64 md:h-[450px] object-cover">
+                    </div>
+
+                    <!-- VS Badge -->
+                    <div id="joke-vs" class="w-14 h-14 md:w-20 md:h-20 shrink-0 bg-gradient-to-br from-brand-gold to-orange-400 rounded-full flex items-center justify-center text-xl md:text-3xl font-black text-white shadow-xl z-20 transition-all duration-500 border-4 border-white">
+                        VS
+                    </div>
+
+                    <!-- Dodge Photo for Joke -->
+                    <div id="joke-dodge" class="joke-img-container w-full md:w-1/2 relative rounded-2xl md:rounded-[2rem] overflow-hidden border-4 border-gray-800 shadow-lg group">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                            <span class="text-white font-bold text-xl md:text-2xl font-script bg-gray-900/90 px-4 py-2 md:px-6 md:py-3 rounded-full transform rotate-6 shadow-lg">აქ დააჭირე 🏎️</span>
+                        </div>
+                        <!-- Explicitly requested Dodge image -->
+                        <img src="photo_27.jpg" 
+                             onerror="this.onerror=null; this.src='https://placehold.co/800x600/333/fff?text=Dodge+Challenger';" 
+                             alt="Dodge Challenger" class="w-full h-64 md:h-[450px] object-cover">
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW: Fun Quiz Section -->
+        <section class="mb-24 md:mb-32" data-aos="fade-up">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="text-4xl sm:text-5xl md:text-6xl font-script text-brand-purple inline-block relative">
+                    მინი ქვიზი 🕵️‍♀️
+                    <span class="absolute -top-6 -right-6 text-3xl md:text-4xl animate-bounce-slow">🎯</span>
+                </h2>
+                <p class="text-gray-600 mt-4 text-lg md:text-xl font-medium">ვნახოთ რამდენად კარგად გიცნობ...</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                <!-- Quiz Card 1 -->
+                <div class="bg-white/80 p-6 md:p-8 rounded-3xl shadow-lg border-2 border-brand-pink text-center hover:shadow-2xl transition-shadow">
+                    <div class="text-5xl mb-4">🍕</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-6 font-body">რას იზამ, თუ შუა ღამით გაგაღვიძე?</h3>
+                    <div class="space-y-3">
+                        <button onclick="checkQuiz(1, 'A')" class="w-full py-3 px-4 bg-brand-light hover:bg-brand-pink hover:text-white rounded-xl font-medium transition-colors border border-pink-200">ა) მაგრად მცემ 🥊</button>
+                        <button onclick="checkQuiz(1, 'B')" class="w-full py-3 px-4 bg-brand-light hover:bg-brand-pink hover:text-white rounded-xl font-medium transition-colors border border-pink-200">ბ) საჭმელს მომთხოვ 🍔</button>
+                    </div>
+                </div>
+
+                <!-- Quiz Card 2 -->
+                <div class="bg-white/80 p-6 md:p-8 rounded-3xl shadow-lg border-2 border-brand-pink text-center hover:shadow-2xl transition-shadow">
+                    <div class="text-5xl mb-4">🤣</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-6 font-body">შენი საყვარელი საქმიანობა?</h3>
+                    <div class="space-y-3">
+                        <button onclick="checkQuiz(2, 'A')" class="w-full py-3 px-4 bg-brand-light hover:bg-brand-pink hover:text-white rounded-xl font-medium transition-colors border border-pink-200">ა) უაზროდ სიცილი 😂</button>
+                        <button onclick="checkQuiz(2, 'B')" class="w-full py-3 px-4 bg-brand-light hover:bg-brand-pink hover:text-white rounded-xl font-medium transition-colors border border-pink-200">ბ) სერიოზული სახით ჯდომა 🗿</button>
+                    </div>
+                </div>
+
+                <!-- Quiz Card 3 -->
+                <div class="bg-white/80 p-6 md:p-8 rounded-3xl shadow-lg border-2 border-brand-pink text-center hover:shadow-2xl transition-shadow md:col-span-2 lg:col-span-1">
+                    <div class="text-5xl mb-4">👑</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-6 font-body">ვინ არის ყველაზე მაგარი?</h3>
+                    <div class="space-y-3">
+                        <button onclick="checkQuiz(3, 'A')" class="w-full py-3 px-4 bg-brand-light hover:bg-brand-pink hover:text-white rounded-xl font-medium transition-colors border border-pink-200">ა) რა თქმა უნდა, შენ! 💖</button>
+                        <button onclick="checkQuiz(3, 'B')" class="w-full py-3 px-4 bg-brand-light hover:bg-brand-pink hover:text-white rounded-xl font-medium transition-colors border border-pink-200">ბ) დოჯი 🏎️</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Massive 28 Photo Gallery Section -->
+        <section class="mb-24 md:mb-32">
+            <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
+                <h2 class="text-4xl sm:text-5xl md:text-6xl font-script text-brand-purple inline-block relative">
+                    ჩვენი საუკეთესო მომენტები
+                    <span class="absolute -top-4 -right-8 text-3xl md:text-4xl animate-pulse-fast">📸</span>
+                </h2>
+                <div class="w-24 md:w-32 h-1.5 md:h-2 bg-gradient-to-r from-brand-pink to-brand-purple mx-auto mt-4 md:mt-6 rounded-full"></div>
+                <p class="text-gray-500 mt-4 text-sm md:text-base">(ჩასქროლე და დატკბი)</p>
+            </div>
+
+            <!-- Masonry Grid for exactly 28 photos -->
+            <div class="masonry-grid">
+                
+                <!-- Photos 1-4 -->
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_1.jpg" onerror="this.src='https://placehold.co/600x800/ffeaf1/ff758c?text=ფოტო+1'" alt="Pic 1"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_2.jpg" onerror="this.src='https://placehold.co/800x600/ffeaf1/ff758c?text=ფოტო+2'" alt="Pic 2"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_3.jpg" onerror="this.src='https://placehold.co/600x600/ffeaf1/ff758c?text=ფოტო+3'" alt="Pic 3"></div>
+                <div class="masonry-item" data-aos="zoom-in">
+                    <img src="photo_4.jpg" onerror="this.src='https://placehold.co/600x900/ffeaf1/ff758c?text=ფოტო+4'" alt="Pic 4">
+                    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 md:p-6 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        <p class="text-white font-script text-2xl md:text-3xl">რა საყვარლობაა! 🥺</p>
+                    </div>
+                </div>
+
+                <!-- Photos 5-8 -->
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_5.jpg" onerror="this.src='https://placehold.co/800x1000/ffeaf1/ff758c?text=ფოტო+5'" alt="Pic 5"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_6.jpg" onerror="this.src='https://placehold.co/600x500/ffeaf1/ff758c?text=ფოტო+6'" alt="Pic 6"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_7.jpg" onerror="this.src='https://placehold.co/600x800/ffeaf1/ff758c?text=ფოტო+7'" alt="Pic 7"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_8.jpg" onerror="this.src='https://placehold.co/800x800/ffeaf1/ff758c?text=ფოტო+8'" alt="Pic 8"></div>
+
+                <!-- Photos 9-12 -->
+                <div class="masonry-item" data-aos="zoom-in">
+                    <img src="photo_9.jpg" onerror="this.src='https://placehold.co/600x700/ffeaf1/ff758c?text=ფოტო+9'" alt="Pic 9">
+                    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 md:p-6 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        <p class="text-white font-script text-2xl md:text-3xl">ჩვენი გიჟობები 🤪</p>
+                    </div>
+                </div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_10.jpg" onerror="this.src='https://placehold.co/800x600/ffeaf1/ff758c?text=ფოტო+10'" alt="Pic 10"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_11.jpg" onerror="this.src='https://placehold.co/600x900/ffeaf1/ff758c?text=ფოტო+11'" alt="Pic 11"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_12.jpg" onerror="this.src='https://placehold.co/600x600/ffeaf1/ff758c?text=ფოტო+12'" alt="Pic 12"></div>
+
+                <!-- Photos 13-16 -->
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_13.jpg" onerror="this.src='https://placehold.co/800x1000/ffeaf1/ff758c?text=ფოტო+13'" alt="Pic 13"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_14.jpg" onerror="this.src='https://placehold.co/600x800/ffeaf1/ff758c?text=ფოტო+14'" alt="Pic 14"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_15.jpg" onerror="this.src='https://placehold.co/800x600/ffeaf1/ff758c?text=ფოტო+15'" alt="Pic 15"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_16.jpg" onerror="this.src='https://placehold.co/600x700/ffeaf1/ff758c?text=ფოტო+16'" alt="Pic 16"></div>
+
+                <!-- Photos 17-20 -->
+                <div class="masonry-item" data-aos="zoom-in">
+                    <img src="photo_17.jpg" onerror="this.src='https://placehold.co/600x800/ffeaf1/ff758c?text=ფოტო+17'" alt="Pic 17">
+                    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 md:p-6 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        <p class="text-white font-script text-2xl md:text-3xl">ვარსკვლავი ხარ! ✨</p>
+                    </div>
+                </div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_18.jpg" onerror="this.src='https://placehold.co/600x600/ffeaf1/ff758c?text=ფოტო+18'" alt="Pic 18"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_19.jpg" onerror="this.src='https://placehold.co/800x900/ffeaf1/ff758c?text=ფოტო+19'" alt="Pic 19"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_20.jpg" onerror="this.src='https://placehold.co/600x500/ffeaf1/ff758c?text=ფოტო+20'" alt="Pic 20"></div>
+
+                <!-- Photos 21-24 -->
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_21.jpg" onerror="this.src='https://placehold.co/800x600/ffeaf1/ff758c?text=ფოტო+21'" alt="Pic 21"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_22.jpg" onerror="this.src='https://placehold.co/600x800/ffeaf1/ff758c?text=ფოტო+22'" alt="Pic 22"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_23.jpg" onerror="this.src='https://placehold.co/600x900/ffeaf1/ff758c?text=ფოტო+23'" alt="Pic 23"></div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_24.jpg" onerror="this.src='https://placehold.co/800x800/ffeaf1/ff758c?text=ფოტო+24'" alt="Pic 24"></div>
+
+                <!-- Photos 25-28 -->
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_25.jpg" onerror="this.src='https://placehold.co/600x700/ffeaf1/ff758c?text=ფოტო+25'" alt="Pic 25"></div>
+                <div class="masonry-item" data-aos="zoom-in">
+                    <img src="photo_26.jpg" onerror="this.src='https://placehold.co/800x600/ffeaf1/ff758c?text=ფოტო+26'" alt="Pic 26">
+                    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent p-4 md:p-6 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        <p class="text-white font-script text-2xl md:text-3xl">საუკეთესო მოგონებები 💖</p>
+                    </div>
+                </div>
+                <div class="masonry-item" data-aos="zoom-in"><img src="photo_27.jpg" onerror="this.src='https://placehold.co/600x600/ffeaf1/ff758c?text=ფოტო+27'" alt="Pic 27"></div>
+               
+
+            </div>
+        </section>
+
+        <!-- Secret Funny Heart Section -->
+        <section class="mb-24 md:mb-32 text-center relative max-w-4xl mx-auto min-h-[350px] md:min-h-[500px] flex flex-col items-center justify-center px-4" data-aos="fade-up">
+            
+            <h2 id="secret-title" class="text-3xl sm:text-4xl md:text-5xl font-script text-gray-700 mb-8 transition-opacity duration-500">
+                სანამ მთავარ საჩუქარს გახსნი... ერთი საიდუმლო მაქვს 🤫
+            </h2>
+
+            <!-- The Heart Button -->
+            <div id="heart-container" class="relative z-50">
+                <div id="magic-heart" class="text-8xl md:text-9xl animate-pulse-fast select-none">
+                    ❤️
+                </div>
+                <p id="heart-hint" class="mt-6 text-brand-purple text-lg md:text-xl font-bold animate-bounce bg-white/50 inline-block px-6 py-2 rounded-full backdrop-blur-sm">თითი დააჭირე გულს!</p>
+            </div>
+
+            <!-- The Hidden GIF -->
+            <div id="gif-reveal" class="hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md mt-10 md:mt-12 opacity-0 transition-all duration-1000 scale-50 z-40 px-4">
+                <div class="bg-white p-4 md:p-6 pb-6 md:pb-10 rounded-[2rem] shadow-2xl border-4 border-brand-pink transform rotate-2 hover:rotate-0 transition-transform duration-300">
+                    <!-- Stitch and Lilo Hug GIF -->
+                    <img src="https://media.giphy.com/media/Vz58J8shFW6BvqnYTm/giphy.gif" 
+                         alt="Funny Best Friends GIF" 
+                         class="w-full h-auto rounded-2xl mb-4 md:mb-6 pointer-events-none">
+                    <p class="text-2xl md:text-4xl font-script text-brand-purple leading-tight">ჩვენი მეგობრობა რეალობაში 😂💖</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Interactive Final Gift Section -->
+        <section class="text-center py-16 md:py-24 relative px-4" data-aos="zoom-in-up">
+            <div class="bg-white/90 backdrop-blur-xl rounded-[2.5rem] md:rounded-[3rem] p-8 sm:p-12 md:p-16 shadow-2xl border-4 border-white max-w-4xl mx-auto relative overflow-hidden group">
+                <!-- Decorative flowers -->
+                <div class="absolute top-4 left-4 md:top-8 md:left-8 text-3xl md:text-5xl opacity-40 group-hover:animate-spin-slow">🌸</div>
+                <div class="absolute bottom-4 right-4 md:bottom-8 md:right-8 text-3xl md:text-5xl opacity-40 group-hover:animate-spin-slow">🌺</div>
+                <div class="absolute top-4 right-4 md:top-8 md:right-8 text-3xl md:text-5xl opacity-40 group-hover:animate-wiggle">🌼</div>
+                <div class="absolute bottom-4 left-4 md:bottom-8 md:left-8 text-3xl md:text-5xl opacity-40 group-hover:animate-wiggle">🌷</div>
+                
+                <h3 class="text-3xl sm:text-4xl md:text-5xl font-script text-gray-800 mb-4 md:mb-6">ახლა კი მთავარი...</h3>
+                <p class="text-gray-600 mb-8 md:mb-12 text-lg md:text-xl px-2">მთავარი საჩუქარი ჯერ კიდევ გაუხსნელია! მზად ხარ?</p>
+                
+                <button id="giftButton" class="magic-btn text-white font-bold py-4 px-8 md:py-6 md:px-14 rounded-full text-xl md:text-3xl flex items-center justify-center mx-auto gap-3 md:gap-4 w-[80%] md:w-auto">
+                    <span>საჩუქრის გახსნა</span>
+                    <span class="text-2xl md:text-4xl animate-bounce">🎁</span>
+                </button>
+
+                <!-- Hidden Message -->
+                <div id="hiddenMessage" class="hidden mt-10 md:mt-16 transition-all duration-1000 transform scale-90 opacity-0">
+                    <div class="bg-gradient-to-br from-pink-50 to-red-50 p-6 md:p-10 rounded-3xl border-2 border-brand-pink border-dashed relative overflow-hidden shadow-inner">
+                        <div class="absolute -top-10 -right-10 text-8xl md:text-9xl opacity-10 pointer-events-none">💐</div>
+                        <h4 class="text-4xl md:text-6xl font-script text-brand-purple mb-6 md:mb-8 leading-relaxed">ყვავილების ზღვა შენთვის! 🌸🌺🌻🌷🌹</h4>
+                        <p class="text-lg md:text-2xl text-gray-700 leading-relaxed font-script relative z-10 px-2 md:px-8">
+                            <br><br>
+                            <strong class="text-2xl md:text-4xl text-brand-purple mt-6 md:mt-8 block drop-shadow-sm bg-white/50 p-4 rounded-2xl">მუდამ ასეთი ლამაზი, გიჟი და ბედნიერი იყავი!<br>შენი საუკეთესო მეგობარი, გიორგი. ❤️</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // 1. Initialize AOS
+        AOS.init({
+            once: true,
+            offset: 30,
+            duration: 800,
+        });
+
+        // 2. Typewriter Effect
+        const textToType = "ლიკა! 💖";
+        const typewriterElement = document.getElementById('typewriter');
+        let i = 0;
+        function typeWriter() {
+            if (i < textToType.length) {
+                typewriterElement.innerHTML += textToType.charAt(i);
+                i++;
+                setTimeout(typeWriter, 200);
+            }
+        }
+        setTimeout(typeWriter, 800);
+
+        // 3. Magic Touch/Mouse Trail
+        let lastSparkleTime = 0;
+        
+        function handleMove(e) {
+            const now = Date.now();
+            if (now - lastSparkleTime > 60) {
+                let x = e.pageX || (e.touches && e.touches[0].pageX);
+                let y = e.pageY || (e.touches && e.touches[0].pageY);
+                if(x && y) createSparkle(x, y);
+                lastSparkleTime = now;
+            }
+        }
+        
+        document.addEventListener('mousemove', handleMove);
+        document.addEventListener('touchmove', handleMove, {passive: true});
+
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            const emojis = ['✨', '⭐️', '💖', '💫'];
+            sparkle.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            const offsetX = (Math.random() - 0.5) * 30;
+            const offsetY = (Math.random() - 0.5) * 30;
+            
+            // Account for scrolling
+            sparkle.style.left = (x - window.scrollX + offsetX) + 'px';
+            sparkle.style.top = (y - window.scrollY + offsetY) + 'px';
+            sparkle.style.fontSize = (Math.random() * 10 + 12) + 'px';
+            
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 1000);
+        }
+
+        // 4. Floating Background Bubbles
+        const bgEmojis = ['💖', '✨', '🌸', '🤍', '🫧'];
+        function createFloatingItem() {
+            const item = document.createElement('div');
+            item.classList.add('float-item');
+            item.innerHTML = bgEmojis[Math.floor(Math.random() * bgEmojis.length)];
+            item.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            item.style.left = Math.random() * 100 + 'vw';
+            
+            const duration = Math.random() * 10 + 10;
+            item.style.animationDuration = duration + 's';
+
+            document.getElementById('bgContainer').appendChild(item);
+            setTimeout(() => item.remove(), duration * 1000);
+        }
+        setInterval(createFloatingItem, 500);
+
+        // 5. Quiz Logic
+        function checkQuiz(question, answer) {
+            let title = '';
+            let text = '';
+            let icon = '';
+
+            if(question === 1) {
+                if(answer === 'A') { title = "ვიცოდი! 😂"; text = "ნამდვილი მოძალადე ხარ!"; icon = "warning"; }
+                else { title = "მშიერაა! 🍔"; text = "საჭმლის გარეშე ხო არ შეგიძლია!"; icon = "success"; }
+            } else if(question === 2) {
+                if(answer === 'A') { title = "ზუსტად! 🤣"; text = "შენი სიცილის ხმა აქამდე ისმის!"; icon = "success"; }
+                else { title = "მატყუებ! 👀"; text = "შენ და სერიოზულობა შორს ხართ ერთმანეთისგან!"; icon = "error"; }
+            } else if(question === 3) {
+                if(answer === 'A') { title = "რა თქმა უნდა! 👑💖"; text = "შენზე მაგარი არავინაა!"; icon = "success"; }
+                else { title = "ღალატი! 😱"; text = "დოჯმა გაჯობა? არა, ვხუმრობ, შენ უფრო მაგარი ხარ!"; icon = "info"; }
+            }
+
+            Swal.fire({
+                title: `<span class="font-script text-4xl text-brand-purple">${title}</span>`,
+                html: `<p class="text-xl font-body mt-2">${text}</p>`,
+                icon: icon,
+                confirmButtonColor: '#ff7eb3',
+                confirmButtonText: 'გაგრძელება ✨'
+            });
+        }
+
+        // 6. Enhanced Dodge vs Lika Joke
+        let likaClicks = 0;
+        const jokeLika = document.getElementById('joke-lika');
+        const jokeDodge = document.getElementById('joke-dodge');
+        const jokeTitle = document.getElementById('joke-title');
+        const jokeVs = document.getElementById('joke-vs');
+
+        jokeLika.addEventListener('click', () => {
+            likaClicks++;
+            
+            if(likaClicks === 1) {
+                jokeTitle.innerHTML = "მართალი ხარ, მანქანა უფრო ლამაზია 😈 <br><span class='text-lg md:text-2xl text-gray-500 font-body block mt-2'>მოდი კიდევ სცადე, დააჭირე ლიკას...</span>";
+                if(window.innerWidth > 768) { jokeLika.style.width = "30%"; jokeDodge.style.width = "70%"; }
+            } 
+            else if(likaClicks === 2) {
+                jokeTitle.innerHTML = "დარწმუნებული ხარ? შეხედე რა ფორმები აქვს! 🏎️ <br><span class='text-lg md:text-2xl text-gray-500 font-body block mt-2'>Dodge აშკარად იგებს!</span>";
+                if(window.innerWidth > 768) { jokeLika.style.width = "15%"; jokeDodge.style.width = "85%"; }
+                jokeVs.style.transform = "scale(0.5) rotate(180deg)";
+                jokeVs.style.opacity = "0.5";
+            }
+            else if(likaClicks >= 3) {
+                jokeTitle.innerHTML = "გადაწყვეტილია! Dodge უპირობო ლიდერია! 😂 <br><span class='text-lg md:text-2xl text-brand-pink font-body block mt-2'>(ახლა დააჭირე დოჯს)</span>";
+                jokeLika.style.display = "none";
+                jokeVs.style.display = "none";
+                if(window.innerWidth > 768) { jokeDodge.style.width = "100%"; }
+            }
+        });
+
+        jokeDodge.addEventListener('click', () => {
+            Swal.fire({
+                title: '<span class="font-script text-4xl md:text-5xl text-brand-pink">კაი ხო, ვხუმრობ! 😍</span>',
+                html: '<p class="text-xl md:text-2xl font-body text-gray-700 leading-relaxed mt-4">შენ 1000-ჯერ უფრო ლამაზი ხარ!<br>Dodge-იც კი დაჩრდილე შენი სილამაზით! 💖🏎️</p>',
+                // Uses your first photo as the popup image
+                imageUrl: 'photo_1.jpg', 
+                imageWidth: window.innerWidth > 768 ? 250 : 150,
+                imageHeight: window.innerWidth > 768 ? 250 : 150,
+                imageAlt: 'Lika Beautiful',
+                confirmButtonText: 'მიყვარხარ! ❤️',
+                confirmButtonColor: '#ff7eb3',
+                backdrop: `rgba(255,117,140,0.4)`
+            }).then(() => {
+                // Reset joke section
+                jokeLika.style.display = "block";
+                jokeVs.style.display = "flex";
+                if(window.innerWidth > 768) {
+                    jokeLika.style.width = "50%";
+                    jokeDodge.style.width = "50%";
+                }
+                jokeVs.style.transform = "scale(1) rotate(0deg)";
+                jokeVs.style.opacity = "1";
+                jokeTitle.innerHTML = "მოდი გავარკვიოთ: რომელი უფრო ლამაზია? 🤔";
+                likaClicks = 0;
+            });
+        });
+
+        // 7. Secret Heart to GIF logic
+        const magicHeart = document.getElementById('magic-heart');
+        const heartContainer = document.getElementById('heart-container');
+        const gifReveal = document.getElementById('gif-reveal');
+        const secretTitle = document.getElementById('secret-title');
+        let heartClicked = false;
+
+        magicHeart.addEventListener('click', () => {
+            if(heartClicked) return;
+            heartClicked = true;
+
+            document.getElementById('heart-hint').style.opacity = '0';
+            magicHeart.classList.add('explode-animation');
+            secretTitle.style.opacity = '0';
+
+            setTimeout(() => {
+                heartContainer.style.display = 'none';
+                gifReveal.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    gifReveal.classList.remove('opacity-0', 'scale-50');
+                    gifReveal.classList.add('opacity-100', 'scale-100');
+                    
+                    secretTitle.innerHTML = "";
+                    secretTitle.style.opacity = '1';
+                }, 50);
+
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#ff7eb3', '#ffffff', '#ffd700']
+                });
+            }, 1000);
+        });
+
+        // 8. Interactive Gift Button (MASSIVE FLOWER FIREWORK)
+        const giftButton = document.getElementById('giftButton');
+        const hiddenMessage = document.getElementById('hiddenMessage');
+
+        function createFallingFlower() {
+            const flower = document.createElement('div');
+            flower.classList.add('falling-flower');
+            const flowerTypes = ['🌸', '🌺', '🌼', '🌷', '🌹', '🌻'];
+            flower.innerHTML = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
+            
+            flower.style.left = Math.random() * 100 + 'vw';
+            flower.style.fontSize = Math.random() * 30 + 20 + 'px'; 
+            flower.style.animationDuration = Math.random() * 3 + 2 + 's';
+            flower.style.marginLeft = (Math.random() * 100 - 50) + 'px';
+
+            document.body.appendChild(flower);
+            setTimeout(() => flower.remove(), 5000);
+        }
+
+        giftButton.addEventListener('click', () => {
+            giftButton.innerHTML = '<span>გილოცავ! 🌸</span>';
+            giftButton.classList.add('opacity-50', 'cursor-not-allowed');
+            giftButton.style.pointerEvents = 'none';
+
+            hiddenMessage.classList.remove('hidden');
+            setTimeout(() => {
+                hiddenMessage.classList.remove('scale-90', 'opacity-0');
+                hiddenMessage.classList.add('scale-100', 'opacity-100');
+            }, 50);
+
+            // Confetti
+            var duration = 8 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+
+                var particleCount = 60 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: 0.5, y: 1 }, angle: 90, spread: 100, startVelocity: 45 })); 
+            }, 250);
+            
+            // Flower Rain
+            let flowerInterval = setInterval(() => {
+                createFallingFlower();
+                createFallingFlower();
+                createFallingFlower(); 
+            }, 100);
+
+            setTimeout(() => clearInterval(flowerInterval), 8000);
+
+            setTimeout(() => {
+                hiddenMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 800);
+        });
+    </script>
+</body>
+</html>
